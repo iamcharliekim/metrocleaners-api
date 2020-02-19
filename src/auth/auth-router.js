@@ -3,7 +3,7 @@ const authRouter = express.Router();
 const jsonBodyParser = express.json();
 const AuthService = require('./auth-service');
 
-authRouter.post('/login', jsonBodyParser, (req, res, next) => {
+authRouter.post('/', jsonBodyParser, (req, res, next) => {
   const { user_name, password } = req.body;
   const loginUser = { user_name, password };
 
@@ -37,6 +37,8 @@ authRouter.post('/login', jsonBodyParser, (req, res, next) => {
           // IF THERE IS A MATCH, CREATE JWT AND SEND AS RESPONSE
           const subject = dbUser.user_name;
           const payload = { user_id: dbUser.id };
+
+          const paySub = AuthService.veryifyJwt(AuthService.createJWT(subject, payload));
 
           res.send({
             authToken: AuthService.createJWT(subject, payload)

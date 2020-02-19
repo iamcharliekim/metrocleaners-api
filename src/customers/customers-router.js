@@ -1,72 +1,53 @@
 const express = require('express');
 const moment = require('moment');
-const AppointmentsService = require('../appointments/appointments-service');
 const CustomersService = require('../customers/customers-service');
-const customersRouter = express.Router()
+const customersRouter = express.Router();
 const jsonBodyParser = express.json();
-
+const { requireAuth } = require('../middleware/basic-auth');
 
 // GET: /customers
-customersRouter.get('/', function(req, res, next) {
+customersRouter.get('/', requireAuth, function(req, res, next) {
   CustomersService.getCustomers(req.app.get('db'))
     .then(customers => {
-        res.json(customers)
+      res.json(customers);
     })
-    .catch(next)
+    .catch(next);
 });
 
 // POST: /customers
-customersRouter.post('/api/customers', jsonBodyParser, function(req, res, next) {
-  console.log(req)
+customersRouter.post('/', jsonBodyParser, function(req, res, next) {
   const full_name = req.body.full_name;
-  const email = req.body.email;
-  const user_name = req.body.user_name;
-  const password = req.body.password;
   const phone_number = req.body.phone_number;
+  const newCustomer = { full_name, phone_number };
 
-  // CHECK IF USERNAME IS UNIQUE
-  CustomersService.userNameIsUnique(req.app.get('db'), user_name)
-    .then(userNameIsUnique => {
-      if (!userNameIsUnique) {
-        res.status(400).json({ error: 'Username already taken' });
+  // CHECK IF CUSTOMER PHONE# IS UNIQUE
+  CustomersService.phoneNumberIsUnique(req.app.get('db'), phone_number).then(
+    phoneNumberIsUnique => {
+      if (!phoneNumberIsUnique) {
+        res.status(400).json({ error: 'Customer already exists' });
       }
 
-      //validate password
-      if (userNameIsUnique){
-        return CustomersService.hashPassword(password)
-          .then(hashedPW => {
-            const updatedCustomer = {
-              full_name,
-              email,
-              user_name,
-              password: hashedPW,
-              phone_number
-            }
-
-            return CustomersService.insertCustomer(req.app.get('db'), updatedCustomer)
-              .then(customer => {
-                res.status(201).json(customer)
-              })
-              .catch(next)
+      //IF # IS UNIQUE, INSERT CUSTOMER
+      if (phoneNumberIsUnique) {
+        return CustomersService.insertCustomer(req.app.get('db'), newCustomer)
+          .then(customer => {
+            res.status(201).json(customer);
           })
+          .catch(next);
       }
-    })
+    }
+  );
 });
 
 // GET: /customers/:id/edit
 customersRouter.get('/:id', function(req, res, next) {
   const id = req.params.id;
-
 });
 
 // POST: /customers/:id/edit
-customersRouter.post('/edit/:id', function(req, res, next) {
-
-});
+customersRouter.post('/edit/:id', function(req, res, next) {});
 
 // POST: /customers/:id/delete
-customersRouter.post('/delete/:id', function(req, res, next) {
-
-});
+customersRouter.post('/delete/:id', function(req, res, next) {});
 
 module.exports = customersRouter;

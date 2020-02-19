@@ -1,62 +1,61 @@
 const bcrypt = require('bcryptjs');
 
 const CustomersService = {
-    getCustomers(db){
-        return db('metrocleaners_customers')
-        .returning('*')
-    },
+  getCustomers(db) {
+    return db('metrocleaners_customers').returning('*');
+  },
 
-    getCustomerById(db, id){
-        return db('metrocleaners_customers')
-          .returning('*')
-          .where({id})
-      },
+  getCustomerById(db, id) {
+    return db('metrocleaners_customers')
+      .returning('*')
+      .where({ id });
+  },
 
-    getCustomerByFullName(db, full_name){
-        return db('metrocleaners_customers')
-            .returning('*')
-            .where({full_name})
-    },
+  getCustomerByFullName(db, full_name) {
+    return db('metrocleaners_customers')
+      .returning('*')
+      .where({ full_name });
+  },
 
-    getCustomerByUsername(db, user_name){
-        return db('metrocleaners_customers')
-            .returning('*')
-            .where({user_name})
-    },
+  getCustomerByPhoneNumber(db, phone_number) {
+    return db('metrocleaners_customers')
+      .returning('*')
+      .where({ phone_number })
+      .first();
+  },
 
-    insertCustomer(db, customer){
-        return db('metrocleaners_customers')
-            .insert(customer)
-            .returning('*')
-    },
-    
-    updateCustomer(db, customer, id){
-        return db('metrocleaners_customers')
-            .where({id})
-            .update(customer)
-            .returning('*')
-    },
+  insertCustomer(db, customer) {
+    return db('metrocleaners_customers')
+      .insert(customer)
+      .returning('*');
+  },
 
-    deleteCustomer(db, id){
-        return db('metrocleaners_customers')
-            .where({id})
-            .del()
-    },
+  updateCustomer(db, customer, id) {
+    return db('metrocleaners_customers')
+      .where({ id })
+      .update(customer)
+      .returning('*');
+  },
 
-    userNameIsUnique(db, user_name) {
-        return db('metrocleaners_customers')
-          .where({ user_name })
-          .first()
-          .then(user => {
-            user;
-            return !user;
-          });
-      },
+  deleteCustomer(db, id) {
+    return db('metrocleaners_customers')
+      .where({ id })
+      .del();
+  },
 
-      hashPassword(password) {
-        return bcrypt.hash(password, 12);
-      },
-    
-}
+  phoneNumberIsUnique(db, phone_number) {
+    return db('metrocleaners_customers')
+      .where({ phone_number })
+      .first()
+      .then(user => {
+        user;
+        return !user;
+      });
+  },
 
-module.exports = CustomersService
+  hashPassword(password) {
+    return bcrypt.hash(password, 12);
+  }
+};
+
+module.exports = CustomersService;

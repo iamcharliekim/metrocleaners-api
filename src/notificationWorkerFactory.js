@@ -1,12 +1,12 @@
 'use strict';
 
-const AppointmentsService = require('./appointments/appointments-service');
+const OrdersService = require('./orders/orders-service');
 
-const notificationWorkerFactory = function(db) {
+const notificationWorkerFactory = function() {
   return {
     run: function(db) {
-        AppointmentsService.findAppointmentsAndSendNotifications(db);
-    },
+      OrdersService.findAppointmentsAndSendNotifications(db);
+    }
   };
 };
 

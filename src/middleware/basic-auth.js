@@ -1,5 +1,5 @@
 const AuthService = require('../auth/auth-service');
-const CustomersService = require('../users/users-service');
+const CustomersService = require('../customers/customers-service');
 
 function requireAuth(req, res, next) {
   // get Authorization header

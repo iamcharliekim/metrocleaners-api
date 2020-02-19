@@ -4,7 +4,7 @@ const config = require('../config');
 
 const AuthService = {
   getUserWithUserName(db, user_name) {
-    return db('metrocleaners_customers')
+    return db('metrocleaners_admins')
       .where({ user_name })
       .first();
   },
@@ -16,7 +16,6 @@ const AuthService = {
   createJWT(subject, payload) {
     return jwt.sign(payload, config.JWT_SECRET, {
       subject,
-      expiresIn: config.JWT_EXPIRY,
       algorithm: 'HS256'
     });
   },
