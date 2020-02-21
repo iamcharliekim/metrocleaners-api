@@ -31,7 +31,7 @@ customersRouter.post('/', jsonBodyParser, function(req, res, next) {
       if (phoneNumberIsUnique) {
         return CustomersService.insertCustomer(req.app.get('db'), newCustomer)
           .then(customer => {
-            res.status(201).json(customer);
+            res.status(201).json(customer[0]);
           })
           .catch(next);
       }

@@ -13,12 +13,14 @@ const authRouter = require('./auth/auth-router');
 const ordersRouter = require('./orders/orders-router');
 const customersRouter = require('./customers/customers-router');
 const adminsRouter = require('./admins/admins-router');
+const clerksRouter = require('./clerks/clerks-router');
 
 app.use(morgan(morganOption));
 app.use(helmet());
 app.use(cors());
 
 app.use('/api/customers', customersRouter);
+app.use('/api/clerks', clerksRouter);
 app.use('/api/admins', adminsRouter);
 app.use('/api/auth/login', authRouter);
 app.use('/api/orders', ordersRouter);
