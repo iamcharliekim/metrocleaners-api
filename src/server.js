@@ -11,7 +11,7 @@ const db = knex({
 });
 
 app.set('db', db);
-// scheduler.start(app.get('db'))
+scheduler.start(app.get('db'));
 
 app.listen(PORT, () => {
   console.log(`Server listening at http://localhost:${PORT}`);

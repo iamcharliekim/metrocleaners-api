@@ -4,8 +4,7 @@ const express = require('express');
 const moment = require('moment');
 const OrdersService = require('./orders-service');
 const CustomersService = require('../customers/customers-service');
-const ClerksService = require('../clerks/clerks-service');
-const ordersRouter = new express.Router();
+const ordersRouter = express.Router();
 const { requireAuth } = require('../middleware/basic-auth');
 
 const jsonBodyParser = express.json();

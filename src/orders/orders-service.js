@@ -30,7 +30,6 @@ const OrdersService = {
   },
 
   requiresNotification(searchDate, ready_by_date) {
-    // WHAT IS this.notification?
     return (
       Math.round(
         moment
@@ -70,10 +69,10 @@ const OrdersService = {
         CustomersService.getCustomerById(db, order.customer).then(customer => {
           // Create options to send the message
           const options = {
-            to: `+[+][1][${customer.phone_number}]`,
+            to: `+[+][1][${customer[0].phone_number}]`,
             from: config.TWILIO_PHONE_NUMBER,
             /* eslint-disable max-len */
-            body: `Hi ${customer.first_name}. Just a reminder that you have an appointment coming up.`
+            body: `Hi ${customer[0].full_name}. Your drycleaning order (#${order.order_number}: ${order.quantity} Pieces : $${order.price}) is ready for pickup.`
             /* eslint-enable max-len */
           };
 
@@ -83,8 +82,23 @@ const OrdersService = {
               // Just log it for now
               console.error(err);
             } else {
+              order.notification_sent = moment()
+                .utc(true)
+                .format();
+
+              order.ready_by_date = moment(order.ready_by_date)
+                .utc(true)
+                .format();
+              order.order_date = moment(order.order_date)
+                .utc(true)
+                .format();
+
+              OrdersService.updateOrder(db, order, order.id).then(orderUpdated => {
+                console.log('notification sent and order is updated!', orderUpdated);
+              });
+
               // Log the last few digits of a phone number
-              let masked = customer.phone_number.substr(0, customer.phone_number.length - 5);
+              let masked = customer[0].phone_number.substr(0, customer[0].phone_number.length - 5);
               masked += '*****';
               console.log(`Message sent to ${masked}`);
             }
@@ -94,9 +108,9 @@ const OrdersService = {
 
       // Don't wait on success/failure, just indicate all messages have been
       // queued for delivery
-      if (callback) {
-        callback.call();
-      }
+      // if (callback) {
+      //   callback.call();
+      // }
     }
   }
 };

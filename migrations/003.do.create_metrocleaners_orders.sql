@@ -14,7 +14,7 @@ SET NULL
     quantity INTEGER NOT NULL,
     picked_up BOOLEAN DEFAULT false NOT NULL,
     paid BOOLEAN DEFAULT false NOT NULL,
-    notification_sent BOOLEAN DEFAULT false NOT NULL,
+    notification_sent TIMESTAMP, 
     date_created TIMESTAMP DEFAULT now
 () NOT NULL,
     date_modified TIMESTAMP

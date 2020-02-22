@@ -14,6 +14,7 @@ const ordersRouter = require('./orders/orders-router');
 const customersRouter = require('./customers/customers-router');
 const adminsRouter = require('./admins/admins-router');
 const clerksRouter = require('./clerks/clerks-router');
+const smsRouter = require('./sms/sms-router');
 
 app.use(morgan(morganOption));
 app.use(helmet());
@@ -24,6 +25,7 @@ app.use('/api/clerks', clerksRouter);
 app.use('/api/admins', adminsRouter);
 app.use('/api/auth/login', authRouter);
 app.use('/api/orders', ordersRouter);
+app.use('/api/sms', smsRouter);
 
 app.use(function errorHandler(error, req, res, next) {
   let response;
