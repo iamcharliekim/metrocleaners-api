@@ -27,25 +27,22 @@ ordersRouter.post('/', requireAuth, jsonBodyParser, function(req, res, next) {
   const ready_by_date = req.body.ready_by_date;
   const price = req.body.price;
   const quantity = +req.body.quantity;
+  const customer = req.body.customer;
 
-  CustomersService.getCustomerByPhoneNumber(req.app.get('db'), phone_number)
-    .then(user => {
-      const customer = user.id;
+  const order = {
+    order_number,
+    clerk,
+    customer,
+    phone_number,
+    order_date,
+    ready_by_date,
+    price,
+    quantity
+  };
 
-      const order = {
-        order_number,
-        clerk,
-        customer,
-        phone_number,
-        order_date,
-        ready_by_date,
-        price,
-        quantity
-      };
-
-      OrdersService.insertOrder(req.app.get('db'), order).then(orders => {
-        res.json(orders[0]);
-      });
+  OrdersService.insertOrder(req.app.get('db'), order)
+    .then(orders => {
+      res.json(orders[0]);
     })
     .catch(next);
 });
@@ -60,6 +57,7 @@ ordersRouter.put('/:id', requireAuth, jsonBodyParser, function(req, res, next) {
   const price = req.body.price;
   const quantity = +req.body.quantity;
   const picked_up = req.body.picked_up;
+  const picked_up_date = req.body.picked_up_date;
   const date_modified = moment();
   const id = req.params.id;
 
@@ -73,7 +71,8 @@ ordersRouter.put('/:id', requireAuth, jsonBodyParser, function(req, res, next) {
     price,
     quantity,
     picked_up,
-    date_modified
+    date_modified,
+    picked_up_date
   };
 
   OrdersService.updateOrder(req.app.get('db'), updatedOrder, id)

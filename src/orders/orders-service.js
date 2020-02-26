@@ -29,7 +29,7 @@ const OrdersService = {
       .del();
   },
 
-  requiresNotification(searchDate, ready_by_date) {
+  requiresNotification(searchDate, ready_by_date, notification_sent) {
     return (
       Math.round(
         moment
@@ -39,7 +39,7 @@ const OrdersService = {
               .diff(moment(searchDate).utc())
           )
           .asMinutes()
-      ) === 0
+      ) <= 0 && !notification_sent
     );
   },
 
@@ -50,7 +50,7 @@ const OrdersService = {
     // GET LIST OF APPOINTMENTS FROM DB AND FILTER USING requiresNotification(searchDate)
     this.getOrders(db).then(orders => {
       orders = orders.filter(order => {
-        return this.requiresNotification(searchDate, order.ready_by_date);
+        return this.requiresNotification(searchDate, order.ready_by_date, order.notification_sent);
       });
 
       if (orders.length > 0) {
@@ -66,43 +66,41 @@ const OrdersService = {
       const client = new Twilio(config.TWILIO_ACCOUNT_SID, config.TWILIO_AUTH_TOKEN);
       orders.forEach(order => {
         // Get customer's object
-        CustomersService.getCustomerById(db, order.customer).then(customer => {
-          // Create options to send the message
-          const options = {
-            to: `+[+][1][${customer[0].phone_number}]`,
-            from: config.TWILIO_PHONE_NUMBER,
-            /* eslint-disable max-len */
-            body: `Hi ${customer[0].full_name}. Your drycleaning order (#${order.order_number}: ${order.quantity} Pieces : $${order.price}) is ready for pickup.`
-            /* eslint-enable max-len */
-          };
+        // Create options to send the message
+        const options = {
+          to: `+[+][1][${order.phone_number}]`,
+          from: config.TWILIO_PHONE_NUMBER,
+          /* eslint-disable max-len */
+          body: `Hi ${order.customer}. Your drycleaning order (#${order.order_number}: ${order.quantity} Pieces : $${order.price}) is ready for pickup.`
+          /* eslint-enable max-len */
+        };
 
-          // Send the message!
-          client.messages.create(options, function(err, response) {
-            if (err) {
-              // Just log it for now
-              console.error(err);
-            } else {
-              order.notification_sent = moment()
-                .utc(true)
-                .format();
+        // Send the message!
+        client.messages.create(options, function(err, response) {
+          if (err) {
+            // Just log it for now
+            console.error(err);
+          } else {
+            order.notification_sent = moment()
+              .utc(true)
+              .format();
 
-              order.ready_by_date = moment(order.ready_by_date)
-                .utc(true)
-                .format();
-              order.order_date = moment(order.order_date)
-                .utc(true)
-                .format();
+            order.ready_by_date = moment(order.ready_by_date)
+              .utc(true)
+              .format();
+            order.order_date = moment(order.order_date)
+              .utc(true)
+              .format();
 
-              OrdersService.updateOrder(db, order, order.id).then(orderUpdated => {
-                console.log('notification sent and order is updated!', orderUpdated);
-              });
+            OrdersService.updateOrder(db, order, order.id).then(orderUpdated => {
+              console.log('notification sent and order is updated!', orderUpdated);
+            });
 
-              // Log the last few digits of a phone number
-              let masked = customer[0].phone_number.substr(0, customer[0].phone_number.length - 5);
-              masked += '*****';
-              console.log(`Message sent to ${masked}`);
-            }
-          });
+            // Log the last few digits of a phone number
+            let masked = order.phone_number.substr(0, order.phone_number.length - 5);
+            masked += '*****';
+            console.log(`Message sent to ${masked}`);
+          }
         });
       });
 
