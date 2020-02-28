@@ -23,8 +23,8 @@ ordersRouter.post('/', requireAuth, jsonBodyParser, function(req, res, next) {
   const order_number = req.body.order_number;
   const clerk = req.body.clerk;
   const phone_number = req.body.phone_number;
-  const order_date = req.body.order_date;
-  const ready_by_date = req.body.ready_by_date;
+  const order_date = new Date(req.body.order_date);
+  const ready_by_date = new Date(req.body.ready_by_date);
   const price = req.body.price;
   const quantity = +req.body.quantity;
   const customer = req.body.customer;
@@ -52,12 +52,13 @@ ordersRouter.put('/:id', requireAuth, jsonBodyParser, function(req, res, next) {
   const clerk = req.body.clerk;
   const customer = req.body.customer;
   const phone_number = req.body.phone_number;
-  const order_date = req.body.order_date;
-  const ready_by_date = req.body.ready_by_date;
+  const order_date = new Date(req.body.order_date);
+  const ready_by_date = new Date(req.body.ready_by_date);
   const price = req.body.price;
   const quantity = +req.body.quantity;
   const picked_up = req.body.picked_up;
-  const picked_up_date = req.body.picked_up_date;
+
+  const picked_up_date = new Date(req.body.picked_up_date);
   const date_modified = moment();
   const id = req.params.id;
 
