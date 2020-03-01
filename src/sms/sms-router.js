@@ -11,9 +11,6 @@ const config = require('../config');
 
 const jsonBodyParser = express.json();
 
-// GET: /orders
-smsRouter.get('/', function(req, res, next) {});
-
 // POST: /sms
 smsRouter.post('/', requireAuth, jsonBodyParser, function(req, res, next) {
   const messageBody = req.body.messageBody;
