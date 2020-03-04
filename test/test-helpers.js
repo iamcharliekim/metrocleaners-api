@@ -16,7 +16,6 @@ function cleanTables(db) {
           trx.raw(`ALTER SEQUENCE metrocleaners_clerks_id_seq minvalue 0 START WITH 1`),
           trx.raw(`ALTER SEQUENCE metrocleaners_orders_id_seq minvalue 0 START WITH 1`),
           trx.raw(`ALTER SEQUENCE metrocleaners_admins_id_seq minvalue 0 START WITH 1`),
-
           trx.raw(`SELECT setval('metrocleaners_customers_id_seq', 0)`),
           trx.raw(`SELECT setval('metrocleaners_clerks_id_seq', 0)`),
           trx.raw(`SELECT setval('metrocleaners_orders_id_seq', 0)`),

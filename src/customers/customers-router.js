@@ -26,7 +26,7 @@ customersRouter.post('/', jsonBodyParser, function(req, res, next) {
         res.status(400).json({ error: 'Customer already exists' });
       }
 
-      //IF # IS UNIQUE, INSERT CUSTOMER
+      // IF # IS UNIQUE, INSERT CUSTOMER
       if (phoneNumberIsUnique) {
         return CustomersService.insertCustomer(req.app.get('db'), newCustomer)
           .then(customer => {

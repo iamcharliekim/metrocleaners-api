@@ -3,7 +3,6 @@
 const express = require('express');
 const moment = require('moment');
 const smsRouter = express.Router();
-const smsService = require('./sms-service');
 const OrdersService = require('../orders/orders-service');
 const { requireAuth } = require('../middleware/basic-auth');
 

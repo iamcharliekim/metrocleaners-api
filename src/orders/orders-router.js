@@ -3,7 +3,6 @@
 const express = require('express');
 const moment = require('moment');
 const OrdersService = require('./orders-service');
-const CustomersService = require('../customers/customers-service');
 const ordersRouter = express.Router();
 const { requireAuth } = require('../middleware/basic-auth');
 
@@ -82,16 +81,5 @@ ordersRouter.put('/:id', requireAuth, jsonBodyParser, function(req, res, next) {
     })
     .catch(next);
 });
-
-// GET: /orders/:id/edit
-ordersRouter.get('/:id', function(req, res, next) {
-  const id = req.params.id;
-});
-
-// POST: /orders/:id/edit
-ordersRouter.post('/edit/:id', function(req, res, next) {});
-
-// POST: /orders/:id/delete
-ordersRouter.post('/delete/:id', function(req, res, next) {});
 
 module.exports = ordersRouter;
