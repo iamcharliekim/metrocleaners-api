@@ -74,7 +74,7 @@ describe('SMS Endpoints', function() {
           expect(smsRes.ready_by_date).to.eql(testSMS.order.ready_by_date);
           expect(smsRes.picked_up).to.eql(testSMS.order.picked_up);
           expect(smsRes.picked_up_date).to.eql(testSMS.order.picked_up_date);
-          //   expect(smsRes.notification_sent).to.eql(new Date().toISOString());
+          expect(smsRes.notification_sent).to.be.a('string');
           expect(smsRes.price).to.eql(testSMS.order.price);
           expect(smsRes.quantity).to.eql(testSMS.order.quantity);
           expect(smsRes.date_created).to.eql(testSMS.order.date_created);

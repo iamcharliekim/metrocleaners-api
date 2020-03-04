@@ -1,14 +1,10 @@
 {
   "folders": [
-	{
-		"path": "/Users/Charlie/projects/metrocleaners-app"
-	},
-	{
-		"path": "/Users/Charlie/projects/POST-UP-APP/post-up-api"
-	},
-	{
-		"path": "/Users/Charlie/projects/POST-UP-APP/post-up-app"
-	}
-],
-  "settings": {}
+    {
+      "path": "/Users/Charlie/projects/metrocleaners-app"
+    },
+    {
+      "path": "/Users/Charlie/projects/POST-UP-APP/post-up-app"
+    }
+  ]
 }

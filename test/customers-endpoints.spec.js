@@ -2,7 +2,7 @@ const knex = require('knex');
 const app = require('../src/app');
 const helpers = require('./test-helpers');
 
-describe.only('Customers Endpoints', function() {
+describe('Customers Endpoints', function() {
   let db, token;
   const testCustomers = helpers.makeCustomersArray();
 
@@ -17,7 +17,7 @@ describe.only('Customers Endpoints', function() {
   before(done => {
     // create user in database
     supertest(app)
-      .post('/api/customers')
+      .post('/api/admins')
       .send({
         full_name: 'Charlie Kim',
         user_name: 'testuser',
@@ -52,28 +52,38 @@ describe.only('Customers Endpoints', function() {
     it('responds with 200 when request is successful', () => {
       return supertest(app)
         .get('/api/customers')
-        .set({
-          Authorization: `Bearer ${token}`
-        })
+        .set('Authorization', `Bearer ${token}`)
         .then(res => {
-          console.log(res.body);
+          const customersArr = res.body;
+          customersArr.forEach((customer, i) => {
+            expect(customer.id).to.eql(i + 1);
+            expect(customer.full_name).to.eql(testCustomers[i].full_name);
+            expect(customer.phone_number).to.eql(testCustomers[i].phone_number);
+            expect(customer.date_created).to.be.a('string');
+            expect(customer.date_modified).to.eql(null);
+          });
         });
     });
   });
 
-  //   describe('POST /api/customers', () => {
-  //     const customer = { full_name: 'Don Klimser', phone_number: '2215255589' };
+  describe('POST /api/customers', () => {
+    const customer = { full_name: 'Don Klimser', phone_number: '2215255589' };
 
-  //     it('responds with 201 when request is successful', () => {
-  //       return supertest(app)
-  //         .post('/api/customers')
-  //         .set({
-  //           Authorization: `Bearer ${token}`
-  //         })
-  //         .send(customer)
-  //         .then(res => {
-  //           console.log(res.body);
-  //         });
-  //     });
-  //   });
+    it('responds with 201 when request is successful', () => {
+      return supertest(app)
+        .post('/api/customers')
+        .set({
+          Authorization: `Bearer ${token}`
+        })
+        .send(customer)
+        .then(res => {
+          const customer = res.body;
+          expect(customer.id).to.eql(4);
+          expect(customer.full_name).to.eql(customer.full_name);
+          expect(customer.phone_number).to.eql(customer.phone_number);
+          expect(customer.date_created).to.be.a('string');
+          expect(customer.date_modified).to.eql(null);
+        });
+    });
+  });
 });

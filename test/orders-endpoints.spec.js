@@ -16,6 +16,7 @@ describe('Orders Endpoints', function() {
   });
 
   before(done => {
+    // create user in database
     supertest(app)
       .post('/api/admins')
       .send({
@@ -24,6 +25,7 @@ describe('Orders Endpoints', function() {
         password: 'testuser'
       })
       .then(user => {
+        // get JWT
         supertest(app)
           .post('/api/auth/login')
           .send({
@@ -107,8 +109,8 @@ describe('Orders Endpoints', function() {
           expect(order1.notification_sent).to.eql(testOrder.notification_sent);
           expect(order1.price).to.eql(testOrder.price);
           expect(order1.quantity).to.eql(testOrder.quantity);
-          //   expect(order1.date_created).to.eql(testOrder.date_created);
-          //   expect(order1.date_modified).to.eql(testOrder.date_modified);
+          expect(order1.date_created).to.be.a('string');
+          expect(order1.date_modified).to.eql(null);
         });
     });
   });
@@ -142,7 +144,7 @@ describe('Orders Endpoints', function() {
           expect(order1.price).to.eql(testOrder.price);
           expect(order1.quantity).to.eql(testOrder.quantity);
           expect(order1.date_created).to.eql(testOrder.date_created);
-          //   expect(order1.date_modified).to.eql(testOrder.date_modified);
+          expect(order1.date_modified).to.be.a('string');
         });
     });
   });

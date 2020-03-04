@@ -1,6 +1,5 @@
 const express = require('express');
 const clerksRouter = express.Router();
-const jsonBodyParser = express.json();
 const ClerksService = require('./clerks-service');
 const { requireAuth } = require('../middleware/basic-auth');
 

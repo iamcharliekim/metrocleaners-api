@@ -1,5 +1,4 @@
 const express = require('express');
-const moment = require('moment');
 const CustomersService = require('../customers/customers-service');
 const customersRouter = express.Router();
 const jsonBodyParser = express.json();
@@ -38,16 +37,5 @@ customersRouter.post('/', jsonBodyParser, function(req, res, next) {
     }
   );
 });
-
-// GET: /customers/:id/edit
-customersRouter.get('/:id', function(req, res, next) {
-  const id = req.params.id;
-});
-
-// POST: /customers/:id/edit
-customersRouter.post('/edit/:id', function(req, res, next) {});
-
-// POST: /customers/:id/delete
-customersRouter.post('/delete/:id', function(req, res, next) {});
 
 module.exports = customersRouter;
