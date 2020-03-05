@@ -13,7 +13,7 @@ ordersRouter.get('/', function(req, res, next) {
   OrdersService.getOrders(req.app.get('db'))
     .then(orders => {
       res.json(orders);
-    })
+    }) 
     .catch(next);
 });
 
