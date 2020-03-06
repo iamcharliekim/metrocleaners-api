@@ -15,15 +15,15 @@ MetroCleaners App is a customer relationship management app for local drycleanin
 
 #### Home Screen:
 
-![home screen](../metrocleaners-client/src/Landing/images/mc-homescreen.png)
+![home screen](mc-homescreen.png)
 
 #### + New Order Form:
 
-![create games screen](../metrocleaners-client/src/Landing/images/mc-orderform.png)
+![create games screen](mc-orderform.png)
 
 #### Customer's List:
 
-![comment board](../metrocleaners-client/src/Landing/images/mc-customers.png)
+![comment board](mc-customers.png)
 
 # How To Use
 
