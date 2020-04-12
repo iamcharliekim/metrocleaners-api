@@ -13,7 +13,18 @@ ordersRouter.get('/', function(req, res, next) {
   OrdersService.getOrders(req.app.get('db'))
     .then(orders => {
       res.json(orders);
-    }) 
+    })
+    .catch(next);
+});
+
+// DELETE: /orders
+ordersRouter.delete('/:id', function(req, res, next) {
+  const id = req.params.id;
+
+  OrdersService.deleteOrder(req.app.get('db'), id)
+    .then(orders => {
+      res.json(orders);
+    })
     .catch(next);
 });
 
@@ -57,7 +68,7 @@ ordersRouter.put('/:id', requireAuth, jsonBodyParser, function(req, res, next) {
   const quantity = +req.body.quantity;
   const picked_up = req.body.picked_up;
 
-  const picked_up_date = new Date(req.body.picked_up_date);
+  const picked_up_date = req.body.picked_up_date ? new Date(req.body.picked_up_date) : null;
   const date_modified = moment();
   const id = req.params.id;
 
